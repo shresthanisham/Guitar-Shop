@@ -1,0 +1,143 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #222;
+    padding: 12px 40px;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.navbar a:hover {
+    color: #f39c12;
+}
+
+.profile-text {
+    color: white;
+    font-weight: bold;
+}
+
+/* SEARCH BAR BELOW NAVBAR - RIGHT ALIGNED */
+.search-container {
+    background: #222;
+    padding: 12px 40px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-container form {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.search-container input {
+    width: 260px;
+    height: 40px;
+    padding: 0 12px;
+    border: none;
+    outline: none;
+    border-radius: 6px 0 0 6px;
+    font-size: 14px;
+}
+
+.search-container button {
+    height: 40px;
+    padding: 0 18px;
+    border: none;
+    background: #f39c12;
+    color: white;
+    cursor: pointer;
+    border-radius: 0 6px 6px 0;
+    font-size: 14px;
+}
+
+.search-container button:hover {
+    background: #e67e22;
+}
+
+/* HERO */
+.hero {
+    text-align: center;
+    padding: 40px;
+}
+
+/* GUITAR SECTION */
+.guitar-section {
+    text-align: center;
+}
+
+.guitar-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.guitar-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 260px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.guitar-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.guitar-card h3 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.guitar-card p {
+    margin: 8px 0;
+}
+
+.guitar-card button {
+    margin-top: 10px;
+    padding: 10px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.guitar-card button:hover {
+    background: #333;
+}
