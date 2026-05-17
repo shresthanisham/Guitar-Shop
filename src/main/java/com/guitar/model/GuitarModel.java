@@ -6,7 +6,11 @@ public class GuitarModel {
     private String model;
     private double price;
     private int stock;
-
+    private String image;
+    private int discount;
+    private String category;
+    private String featured;
+    
     public GuitarModel() {
     }
 
@@ -48,5 +52,36 @@ public class GuitarModel {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(String featured) {
+        this.featured = featured;
+    }
+    
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

@@ -16,13 +16,13 @@ public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 🔥 destroy session
+        // destroy session
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
 
-        // 🔥 go back to home page
+        // go back to home page
         response.sendRedirect(request.getContextPath() + "/home");
     }
 }

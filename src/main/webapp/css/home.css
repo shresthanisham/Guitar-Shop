@@ -1,94 +1,191 @@
+/* GENERAL */
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
     background: #f4f4f4;
-    margin: 0;
 }
 
 /* NAVBAR */
 .navbar {
+    background: #222;
+    color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #222;
-    padding: 12px 40px;
+    padding: 14px 40px;
 }
 
-.nav-left {
+/* LOGO + SEARCH */
+.logo-search {
     display: flex;
     align-items: center;
-    gap: 25px;
+    gap: 35px;
 }
 
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
+/* LOGO */
 .logo {
-    color: white;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
+    white-space: nowrap;
 }
 
-.navbar a {
-    color: white;
-    text-decoration: none;
-    font-size: 15px;
-}
-
-.navbar a:hover {
-    color: #f39c12;
-}
-
-.profile-text {
-    color: white;
-    font-weight: bold;
-}
-
-/* SEARCH BAR BELOW NAVBAR - RIGHT ALIGNED */
-.search-container {
-    background: #222;
-    padding: 12px 40px;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.search-container form {
+/* SEARCH BAR */
+.search-bar {
     display: flex;
     align-items: center;
-    gap: 0;
+    width: 380px;
+    height: 46px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-.search-container input {
-    width: 260px;
-    height: 40px;
-    padding: 0 12px;
+.search-bar input {
+    flex: 1;
+    height: 100%;
     border: none;
     outline: none;
-    border-radius: 6px 0 0 6px;
-    font-size: 14px;
+    padding: 0 22px;
+    font-size: 16px;
+    background: white;
 }
 
-.search-container button {
-    height: 40px;
-    padding: 0 18px;
+.search-bar input::placeholder {
+    color: #888;
+}
+
+.search-bar button {
+    width: 70px;
+    height: 100%;
     border: none;
     background: #f39c12;
     color: white;
+    font-size: 24px;
     cursor: pointer;
-    border-radius: 0 6px 6px 0;
-    font-size: 14px;
+    transition: 0.2s;
 }
 
-.search-container button:hover {
+.search-bar button:hover {
+    background: #e67e22;
+}
+
+/* NAV RIGHT */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+}
+
+.nav-right a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.nav-right a:hover {
+    color: #f39c12;
+}
+
+/* PROFILE */
+.profile-text {
+    color: #00d9ff;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* NAV BUTTONS */
+.nav-btn {
+    color: white;
+    font-weight: bold;
+}
+
+.nav-btn:hover {
+    color: #f39c12;
+}
+
+/* CART BUTTON */
+.cart-btn {
+    background: #f39c12;
+    color: white !important;
+    padding: 10px 16px;
+    border-radius: 7px;
+    white-space: nowrap;
+}
+
+.cart-btn:hover {
+    background: #e67e22;
+}
+
+/* ADMIN BUTTON */
+.admin-btn {
+    background: #00c853;
+    color: white !important;
+    padding: 10px 16px;
+    border-radius: 7px;
+    white-space: nowrap;
+}
+
+.admin-btn:hover {
+    background: #00b34a;
+}
+
+/* BANNER */
+.banner {
+    height: 420px;
+    background:
+        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+        url('../images/banner.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.banner-content h1 {
+    font-size: 58px;
+    margin-bottom: 18px;
+}
+
+.banner-content p {
+    font-size: 22px;
+    margin-bottom: 30px;
+    color: #eee;
+}
+
+.banner-btn {
+    display: inline-block;
+    padding: 14px 28px;
+    background: #f39c12;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.banner-btn:hover {
     background: #e67e22;
 }
 
 /* HERO */
 .hero {
     text-align: center;
-    padding: 40px;
+    padding: 60px 20px;
+}
+
+.hero h1 {
+    font-size: 38px;
+    margin-bottom: 10px;
+    color: black;
+}
+
+.hero p {
+    color: #555;
 }
 
 /* GUITAR SECTION */
@@ -96,20 +193,32 @@ body {
     text-align: center;
 }
 
+.guitar-section h2 {
+    margin-bottom: 20px;
+    color: black;
+}
+
+/* GRID */
 .guitar-grid {
     display: flex;
     justify-content: center;
     gap: 30px;
-    margin-top: 20px;
     flex-wrap: wrap;
+    padding: 25px;
 }
 
+/* CARD */
 .guitar-card {
     background: white;
     padding: 20px;
-    border-radius: 10px;
-    width: 260px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    width: 270px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.guitar-card:hover {
+    transform: translateY(-6px);
 }
 
 .guitar-card img {
@@ -120,24 +229,143 @@ body {
 }
 
 .guitar-card h3 {
-    margin-top: 15px;
-    margin-bottom: 10px;
+    margin-top: 12px;
 }
 
 .guitar-card p {
-    margin: 8px 0;
+    margin: 5px 0;
 }
 
+/* CARD BUTTON */
 .guitar-card button {
     margin-top: 10px;
-    padding: 10px;
+    padding: 10px 15px;
     background: black;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
 }
 
 .guitar-card button:hover {
     background: #333;
+}
+
+/* CART PAGE */
+.cart-page {
+    padding: 40px 20px;
+}
+
+.cart-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.cart-header h1 {
+    font-size: 36px;
+    color: black;
+}
+
+.cart-header p {
+    color: #555;
+}
+
+.cart-box {
+    width: 80%;
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cart-table th {
+    background: #222;
+    color: white;
+    padding: 14px;
+}
+
+.cart-table td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.remove-btn {
+    background: #d32f2f;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.remove-btn:hover {
+    background: #b71c1c;
+}
+
+.cart-summary {
+    margin-top: 25px;
+    text-align: right;
+}
+
+.cart-summary h2 {
+    margin-bottom: 18px;
+}
+
+.continue-btn {
+    display: inline-block;
+    background: #f39c12;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.continue-btn:hover {
+    background: #e67e22;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 40px;
+}
+/* INVENTORY BANNER */
+.inventory-banner {
+    height: 320px;
+
+    background:
+        linear-gradient(rgba(0,0,0,0.6),
+        rgba(0,0,0,0.6)),
+        url('../images/inventory-banner.jpg');
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    color: white;
+}
+
+/* INVENTORY BANNER CONTENT */
+.inventory-banner-content h1 {
+    font-size: 52px;
+    margin-bottom: 15px;
+}
+
+.inventory-banner-content p {
+    font-size: 20px;
+    color: #eee;
 }

@@ -1,9 +1,7 @@
 package com.guitar.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +11,7 @@ import com.guitar.model.UserModel;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 @WebServlet("/admin")
 public class AdminDashboardServlet extends HttpServlet {
@@ -53,18 +48,15 @@ public class AdminDashboardServlet extends HttpServlet {
         try {
             if ("edit".equalsIgnoreCase(action)) {
                 int guitarId = Integer.parseInt(request.getParameter("id"));
-                GuitarModel editGuitar = getGuitarById(guitarId);
-                request.setAttribute("editGuitar", editGuitar);
+                request.setAttribute("editGuitar", getGuitarById(guitarId));
             } else if ("delete".equalsIgnoreCase(action)) {
                 int guitarId = Integer.parseInt(request.getParameter("id"));
                 deleteGuitar(guitarId);
-                response.sendRedirect(request.getContextPath() + "/admin");
+                response.sendRedirect(request.getContextPath() + "/admin?message=deleted");
                 return;
             }
 
-            List<GuitarModel> guitars = getAllGuitars();
-            request.setAttribute("guitars", guitars);
-
+            request.setAttribute("guitars", getAllGuitars());
             request.getRequestDispatcher("/WEB-INF/pages/admin-dashboard.jsp")
                    .forward(request, response);
 
@@ -89,40 +81,41 @@ public class AdminDashboardServlet extends HttpServlet {
         String model = request.getParameter("model");
         String priceStr = request.getParameter("price");
         String stockStr = request.getParameter("stock");
+        String discountStr = request.getParameter("discount");
+        String category = request.getParameter("category");
+        String featured = request.getParameter("featured");
 
         try {
-            if (brand == null || brand.trim().isEmpty() ||
-                model == null || model.trim().isEmpty() ||
-                priceStr == null || priceStr.trim().isEmpty() ||
-                stockStr == null || stockStr.trim().isEmpty()) {
-
-                request.setAttribute("error", "All fields are required.");
-                request.setAttribute("guitars", getAllGuitars());
-                request.getRequestDispatcher("/WEB-INF/pages/admin-dashboard.jsp")
-                       .forward(request, response);
-                return;
-            }
-
             double price = Double.parseDouble(priceStr);
             int stock = Integer.parseInt(stockStr);
+            int discount = (discountStr == null || discountStr.trim().isEmpty())
+                    ? 0
+                    : Integer.parseInt(discountStr);
 
             if ("update".equalsIgnoreCase(action)) {
                 int guitarId = Integer.parseInt(request.getParameter("guitarId"));
-                updateGuitar(guitarId, brand, model, price, stock);
-            } else {
-                addGuitar(brand, model, price, stock);
-            }
+                updateGuitar(guitarId, brand, model, price, stock, discount, category, featured);
 
-            response.sendRedirect(request.getContextPath() + "/admin");
+                response.sendRedirect(request.getContextPath() + "/admin?message=updated");
+                return;
+            } else {
+                addGuitar(brand, model, price, stock, discount, category, featured);
+
+                response.sendRedirect(request.getContextPath() + "/admin?message=added");
+                return;
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
+
             request.setAttribute("error", "Database error occurred.");
+
             try {
                 request.setAttribute("guitars", getAllGuitars());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+
             request.getRequestDispatcher("/WEB-INF/pages/admin-dashboard.jsp")
                    .forward(request, response);
         }
@@ -137,13 +130,7 @@ public class AdminDashboardServlet extends HttpServlet {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                GuitarModel guitar = new GuitarModel();
-                guitar.setGuitarId(rs.getInt("guitar_id"));
-                guitar.setBrand(rs.getString("brand"));
-                guitar.setModel(rs.getString("model"));
-                guitar.setPrice(rs.getDouble("price"));
-                guitar.setStock(rs.getInt("stock"));
-                guitars.add(guitar);
+                guitars.add(mapGuitar(rs));
             }
         }
 
@@ -152,7 +139,6 @@ public class AdminDashboardServlet extends HttpServlet {
 
     private GuitarModel getGuitarById(int guitarId) throws Exception {
         String query = "SELECT * FROM guitars WHERE guitar_id = ?";
-        GuitarModel guitar = null;
 
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -161,21 +147,35 @@ public class AdminDashboardServlet extends HttpServlet {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    guitar = new GuitarModel();
-                    guitar.setGuitarId(rs.getInt("guitar_id"));
-                    guitar.setBrand(rs.getString("brand"));
-                    guitar.setModel(rs.getString("model"));
-                    guitar.setPrice(rs.getDouble("price"));
-                    guitar.setStock(rs.getInt("stock"));
+                    return mapGuitar(rs);
                 }
             }
         }
 
+        return null;
+    }
+
+    private GuitarModel mapGuitar(ResultSet rs) throws Exception {
+        GuitarModel guitar = new GuitarModel();
+
+        guitar.setGuitarId(rs.getInt("guitar_id"));
+        guitar.setBrand(rs.getString("brand"));
+        guitar.setModel(rs.getString("model"));
+        guitar.setPrice(rs.getDouble("price"));
+        guitar.setStock(rs.getInt("stock"));
+        guitar.setDiscount(rs.getInt("discount"));
+        guitar.setCategory(rs.getString("category"));
+        guitar.setFeatured(rs.getString("featured"));
+
         return guitar;
     }
 
-    private void addGuitar(String brand, String model, double price, int stock) throws Exception {
-        String query = "INSERT INTO guitars (brand, model, price, stock) VALUES (?, ?, ?, ?)";
+    private void addGuitar(String brand, String model, double price, int stock,
+                           int discount, String category, String featured) throws Exception {
+
+        String query = "INSERT INTO guitars "
+                + "(brand, model, price, stock, discount, category, featured) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -184,12 +184,19 @@ public class AdminDashboardServlet extends HttpServlet {
             stmt.setString(2, model);
             stmt.setDouble(3, price);
             stmt.setInt(4, stock);
+            stmt.setInt(5, discount);
+            stmt.setString(6, category);
+            stmt.setString(7, featured);
+
             stmt.executeUpdate();
         }
     }
 
-    private void updateGuitar(int guitarId, String brand, String model, double price, int stock) throws Exception {
-        String query = "UPDATE guitars SET brand = ?, model = ?, price = ?, stock = ? WHERE guitar_id = ?";
+    private void updateGuitar(int guitarId, String brand, String model, double price,
+                              int stock, int discount, String category, String featured) throws Exception {
+
+        String query = "UPDATE guitars SET brand=?, model=?, price=?, stock=?, "
+                + "discount=?, category=?, featured=? WHERE guitar_id=?";
 
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -198,7 +205,11 @@ public class AdminDashboardServlet extends HttpServlet {
             stmt.setString(2, model);
             stmt.setDouble(3, price);
             stmt.setInt(4, stock);
-            stmt.setInt(5, guitarId);
+            stmt.setInt(5, discount);
+            stmt.setString(6, category);
+            stmt.setString(7, featured);
+            stmt.setInt(8, guitarId);
+
             stmt.executeUpdate();
         }
     }

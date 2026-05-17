@@ -10,10 +10,7 @@ import com.guitar.model.UserModel;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -52,11 +49,9 @@ public class LoginServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("loggedInUser", user);
 
-                if ("admin".equalsIgnoreCase(user.getRole())) {
-                    response.sendRedirect(request.getContextPath() + "/home");
-                } else {
-                    response.sendRedirect(request.getContextPath() + "/home");
-                }
+                // Admin and normal user both go to home page
+                response.sendRedirect(request.getContextPath() + "/home");
+
             } else {
                 request.setAttribute("error", "Invalid email or password");
                 request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
